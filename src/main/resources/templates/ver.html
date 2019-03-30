@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="layout/layout :: head"></head>
 <body>
 
@@ -10,6 +10,12 @@
 		<div class="card bg-white text-black">
 			<div class="card-header" th:text="${titulo}"></div>
 			<div class="card-body">
+
+				<h4 class="card-title">
+					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{/factura/form/}+${cliente.id}">Crear factura</a>
+				</h4>
+
+
 				<img th:if="${#strings.length(cliente.foto)}" class="img-thumbnail rounded float-left" style="max-width: 25%" th:alt="${cliente.foto}" th:src="@{'/uploads/'+${cliente.foto}}"></img>
 
 				<ul class="list-group">
@@ -18,6 +24,32 @@
 					<li class="list-group-item" th:text="${cliente.email}"></li>
 					<li class="list-group-item" th:text="${cliente.createAt}"></li>
 				</ul>
+
+
+				<div th:if="${#lists.isEmpty(cliente.facturas)}" class="alert alert-info my-4" th:text="'El cliente no tiene facturas'"></div>
+				<table th:if="${not #lists.isEmpty(cliente.facturas)}" class="table table-bordered table-striped my-4">
+					<thead class="thead-inverse">
+						<tr>
+							<th>Folio</th>
+							<th>Descripción</th>
+							<th>Fecha</th>
+							<th>Total</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Ver</th>
+							<th sec:authorize="hasRole('ROLE_ADMIN')">Eliminar</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="factura:${cliente.facturas}">
+							<td th:text="${factura.id}"></td>
+							<td th:text="${factura.descripcion}"></td>
+							<td th:text="${factura.createAt}"></td>
+							<td th:text="${factura.total}"></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/factura/ver/}+${factura.id}" th:text="'Detalle'" class="btn btn-primary btn-xs"></a></td>
+							<td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{/factura/eliminar/}+${factura.id}" th:text="'Eliminar'" class="btn btn-danger btn-xs"
+								onclick="return confirm('¿Está seguro de eliminar esta factura?')"></a></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
 	</div>

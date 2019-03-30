@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+	<script type="text/javascript" th:fragment="javascript">
+		$(document).ready(function() {
+			$("#buscar_producto").autocomplete({
+				source : function(request, response) {
+					$.ajax({
+						url : "/factura/cargarProductos/" + request.term,
+						dataType : "json",
+						data : {
+							term : request.term
+						},
+						success : function(data) {
+							response($.map(data, function(item) {
+								return {
+									value : item.id,
+									label : item.nombre,
+									precio : item.precio
+								};
+							}));
+						},
+					});
+				},
+				select : function(event, ui) {
+					// para selecionar un producto
+					//$("#buscar_producto").val(ui.item.label);
+
+					var id = ui.item.value;
+					var nombre = ui.item.label;
+					var precio = ui.item.precio;
+
+					if (itemsHelper.hasProducto(id)) {
+						itemsHelper.incrementarCantidad(id, precio);
+
+						return false;
+					}
+
+					var linea = $("#plantillaItemsFactura").html();
+					linea = linea.replace(/{ID}/g, id);
+					linea = linea.replace(/{NOMBRE}/g, nombre);
+					linea = linea.replace(/{PRECIO}/g, precio);
+
+					$("#cargarItemsProductos tbody").append(linea);
+					itemsHelper.calcularImporte(id, precio, 1);
+					return false;
+
+				}
+			});
+
+			$("form").submit(function() {
+				$("#plantillaItemsFactura").remove();
+				return;
+
+			});
+
+		});
+
+		var itemsHelper = {
+			calcularImporte : function(id, precio, cantidad) {
+				$("#total_importe_" + id).html(parseInt(precio) * parseInt(cantidad));
+
+				this.calcularGranTotal();
+			},
+
+			hasProducto : function(id) {
+				var resultado = false;
+				$("input[name='item_id[]']").each(function() {
+					if (parseInt(id) == parseInt($(this).val())) {
+						resultado = true;
+					}
+				});
+
+				return resultado;
+			},
+
+			incrementarCantidad : function(id, precio) {
+				var cantidad = 0;
+
+				if ($("#cantidad_" + id).val()) {
+					cantidad = $("#cantidad_" + id).val();
+				}
+
+				$("#cantidad_" + id).val(++cantidad);
+				this.calcularImporte(id, precio, cantidad);
+
+			},
+
+			eliminarLineaFactura : function(id) {
+				$("#row_" + id).remove();
+
+				this.calcularGranTotal();
+			},
+
+			calcularGranTotal : function() {
+				var total = 0;
+
+				$("span[id^='total_importe_']").each(function() {
+					total += parseInt($(this).html());
+				});
+
+				$("#granTotal").html(total);
+			}
+		}
+	</script>
+</body>
+</html>
