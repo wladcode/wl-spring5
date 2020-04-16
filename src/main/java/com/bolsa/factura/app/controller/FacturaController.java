@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,7 +28,9 @@ import com.bolsa.factura.app.models.entity.Factura;
 import com.bolsa.factura.app.models.entity.ItemFactura;
 import com.bolsa.factura.app.models.entity.Producto;
 import com.bolsa.factura.app.models.service.IClienteService;
+import com.bolsa.factura.app.util.Utils;
 
+@Secured(Utils.ROLE_ADMIN)
 @Controller
 @RequestMapping("/factura")
 @SessionAttributes("factura")
@@ -38,6 +41,7 @@ public class FacturaController {
 	@Autowired
 	private IClienteService clienteService;
 
+	
 	@GetMapping("/form/{clienteId}")
 	public String crear(@PathVariable(value = "clienteId") long clienteId, Map<String, Object> model, RedirectAttributes flash) {
 
