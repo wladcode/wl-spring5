@@ -1,5 +1,4 @@
 INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES('Wladimir', 'López', 'wladdylopez@hotmail.com', '2019-01-10', '');
-INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES('Diana', 'Calva', 'cedina_18@hotmail.com', '2019-01-10', '');
 INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES('Andres', 'Guzman', 'profesor@bolsadeideas.com', '2017-08-01', '');
 INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES('John', 'Doe', 'john.doe@gmail.com', '2017-08-02', '');
 INSERT INTO clientes (nombre, apellido, email, create_at, foto) VALUES('Linus', 'Torvalds', 'linus.torvalds@gmail.com', '2017-08-03', '');
