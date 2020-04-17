@@ -3,6 +3,7 @@ package com.bolsa.factura.app.controller;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -11,6 +12,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,10 +57,13 @@ public class ClienteController {
 
 	@Autowired
 	private IUploadFileService uploadFileService;
+	
+	@Autowired
+	private MessageSource messageSource;
 
 	@GetMapping(value = {"/listar", "/"})
 	public String listar(Model model, @RequestParam(name = "page", defaultValue = "0") int page
-			, Authentication authentication, HttpServletRequest request) {
+			, Authentication authentication, HttpServletRequest request, Locale locale) {
 		
 		if(authentication !=null) {
 			LOG.info("Hola USUARIO autenticado {}", authentication.getName());
@@ -93,7 +98,7 @@ public class ClienteController {
 
 		PageRender<Cliente> pageRender = new PageRender<>("/listar", clientes);
 
-		model.addAttribute("titulo", "Listado de clientes");
+		model.addAttribute("titulo", messageSource.getMessage("text.cliente.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
 		return "listar";
