@@ -8,13 +8,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.bolsa.factura.app.auth.handler.LoginSuccessHandler;
-import com.bolsa.factura.app.util.Utils;
+import com.bolsa.factura.app.models.service.JpaUserDatailsService;
 
 @EnableGlobalMethodSecurity(securedEnabled = true)
 @Configuration
@@ -25,6 +23,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private DataSource datasource;
+    
+    @Autowired
+    private JpaUserDatailsService userDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -61,10 +62,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 
 	// esto es para el uso de DATASOURCE
+	/*
 	build.jdbcAuthentication().dataSource(datasource).passwordEncoder(passwordEncoder)
 		.usersByUsernameQuery("select username, password, enabled from user where username = ?")
 		.authoritiesByUsernameQuery(
 			"select u.username, a.authority from authorities a inner join user u on a.user_id = u.id where u.username= ?");
+			*/
+	
+	//Esto es para el uso de JPA
+	build.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
     }
 
 }
