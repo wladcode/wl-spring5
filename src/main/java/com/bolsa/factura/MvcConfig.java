@@ -1,4 +1,4 @@
-package com.bolsa.factura.app;
+package com.bolsa.factura;
 
 import java.util.Locale;
 

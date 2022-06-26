@@ -15,9 +15,9 @@
 					<a sec:authorize="hasRole('ROLE_ADMIN')" class="btn btn-primary btn-xs" th:href="@{/factura/form/}+${cliente.id}">Crear factura</a>
 				</h4>
 
-
+				<!--
 				<img th:if="${#strings.length(cliente.foto)}" class="img-thumbnail rounded float-left" style="max-width: 25%" th:alt="${cliente.foto}" th:src="@{'/uploads/'+${cliente.foto}}"></img>
-
+				-->
 				<ul class="list-group">
 					<li class="list-group-item" th:text="${cliente.nombre}"></li>
 					<li class="list-group-item" th:text="${cliente.apellido}"></li>
