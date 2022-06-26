@@ -13,11 +13,11 @@ public class HomeController {
     @Autowired
     private MessageSource messageSource;
 
-    @GetMapping(value = "/home")
+    @GetMapping(value = "/")
     public String loadHome(Model model, Locale locale) {
 
         model.addAttribute("titulo", messageSource.getMessage("home.title", null, locale));
-        return "homePage";
+        return "index";
 
     }
 }

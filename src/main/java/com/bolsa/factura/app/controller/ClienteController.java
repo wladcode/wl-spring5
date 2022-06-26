@@ -61,7 +61,7 @@ public class ClienteController {
 	@Autowired
 	private MessageSource messageSource;
 
-	@GetMapping(value = {"/listar", "/"})
+	@GetMapping("/listarClientes")
 	public String listar(Model model, @RequestParam(name = "page", defaultValue = "0") int page
 			, Authentication authentication, HttpServletRequest request, Locale locale) {
 		
@@ -101,7 +101,7 @@ public class ClienteController {
 		model.addAttribute("titulo", messageSource.getMessage("text.cliente.titulo", null, locale));
 		model.addAttribute("clientes", clientes);
 		model.addAttribute("page", pageRender);
-		return "listar";
+		return "cliente/listar";
 	}
 
 	@Secured(Utils.ROLE_ADMIN)
@@ -112,7 +112,7 @@ public class ClienteController {
 		model.put("titulo", "Crear cliente");
 		model.put("cliente", cliente);
 
-		return "createUser";
+		return "cliente/createUser";
 	}
 
 	@Secured(Utils.ROLE_ADMIN)
@@ -124,17 +124,17 @@ public class ClienteController {
 			cliente = clienteService.findById(id);
 			if (cliente == null) {
 				flash.addFlashAttribute("error", "El id del cliente no existe en base de datos");
-				return "redirect:/listar";
+				return "redirect:/listarClientes";
 			}
 		} else {
 			flash.addFlashAttribute("error", "El id del cliente no puedo ser cero");
-			return "redirect:/listar";
+			return "redirect:/listarClientes";
 		}
 
 		model.put("titulo", "Editar cliente");
 		model.put("cliente", cliente);
 
-		return "createUser";
+		return "cliente/createUser";
 	}
 
 	@Secured(Utils.ROLE_ADMIN)
@@ -142,7 +142,7 @@ public class ClienteController {
 	public String createUser(@Valid Cliente cliente, BindingResult result, Model model, @RequestParam("file") MultipartFile foto, RedirectAttributes flash, SessionStatus status) {
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Crear cliente");
-			return "createUser";
+			return "cliente/createUser";
 		}
 
 		if (!foto.isEmpty()) {
@@ -167,7 +167,7 @@ public class ClienteController {
 		clienteService.save(cliente);
 		status.setComplete();
 		flash.addFlashAttribute("success", messageFlash);
-		return "redirect:listar";
+		return "redirect:/listarClientes";
 	}
 
 	@Secured(Utils.ROLE_ADMIN)
@@ -184,7 +184,7 @@ public class ClienteController {
 
 		}
 
-		return "redirect:/listar";
+		return "redirect:/listarClientes";
 	}
 
 	@Secured(Utils.ROLE_USER)
@@ -194,7 +194,7 @@ public class ClienteController {
 		Cliente cliente = clienteService.fetchClienteByIdWithFactura(id);//clienteService.findById(id);
 		if (cliente == null) {
 			flash.addFlashAttribute("erro", "El cliente no existe");
-			return "redirect:/listar";
+			return "redirect:/listarClientes";
 		}
 
 		model.put("cliente", cliente);

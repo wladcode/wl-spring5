@@ -49,7 +49,7 @@ public class FacturaController {
 
 		if (cliente == null) {
 			flash.addAttribute("error", "El cliente no existe en la base de datos");
-			return "redirect:/listar";
+			return "redirect:/listarClientes";
 		}
 
 		Factura factura = new Factura();
@@ -110,7 +110,7 @@ public class FacturaController {
 		if (factura == null) {
 			flash.addFlashAttribute("error", "La factura no existe en la base de datos");
 
-			return "redirect:/listar";
+			return "redirect:/listarClientes";
 		}
 
 		model.addAttribute("factura", factura);
@@ -133,7 +133,7 @@ public class FacturaController {
 
 		flash.addFlashAttribute("error", "La factura no existe, no se pudo eliminar");
 
-		return "redirect:/listar";
+		return "redirect:/listarClientes";
 
 	}
 
